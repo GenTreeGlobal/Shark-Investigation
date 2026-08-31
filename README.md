@@ -1,10 +1,15 @@
 # Shark Investigation
 
 A field-briefing-style page on why sharks are facing extinction and what actually
-helps protect them, built for a family shark-conservation activity.
+helps protect them, built for a family shark-conservation activity — plus a
+rescue mini-game built from the same research.
 
-Open `index.html` in a browser, or view the published version here:
-https://claude.ai/code/artifact/b8984918-e4f7-4cc5-87b2-0a57a940ada7
+- `index.html` — the mission briefing: threats, real conservation actions, and a
+  family checklist. Published version: https://claude.ai/code/artifact/b8984918-e4f7-4cc5-87b2-0a57a940ada7
+- `game.html` — **Manta Rider Rescue**, a shark-rescue game starring Johnny,
+  James & Sarah. Free 6 threatened sharks, earn badges, and learn why 100
+  million sharks are killed every year. Published version:
+  https://claude.ai/code/artifact/e0573acd-29a6-4de3-b7dd-22eb0656df2e
 
 ## Inspiration
 
