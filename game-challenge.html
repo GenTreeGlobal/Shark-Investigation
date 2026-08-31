@@ -1,0 +1,719 @@
+<title>Manta Rider Rescue: Classroom Challenge</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,700&display=swap');
+
+  :root {
+    --deep: #072338;
+    --mid: #0e4d74;
+    --line: #1c7fac;
+    --sand: #f6efe1;
+    --card: #fffaf0;
+    --ink: #0d1b2a;
+    --ink-soft: #3d4f60;
+    --aqua: #1fb8a6;
+    --aqua-deep: #0c8677;
+    --sun: #f5a52a;
+    --sun-deep: #cf7f0f;
+    --coral: #ee5a45;
+    --coral-deep: #c73f2d;
+    --hairline: rgba(13, 27, 42, 0.14);
+    --shadow: 0 18px 40px -20px rgba(7, 35, 56, 0.5);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --deep: #051523; --mid: #0b3554; --line: #2c86b8;
+      --sand: #081c30; --card: #0e2740; --ink: #eaf2f8; --ink-soft: #a9c0d2;
+      --aqua: #37c9b6; --aqua-deep: #58e0cc;
+      --sun: #f5b64a; --sun-deep: #ffcf7d;
+      --coral: #ff7c65; --coral-deep: #ffa08e;
+      --hairline: rgba(234, 242, 248, 0.14);
+      --shadow: 0 18px 44px -18px rgba(0,0,0,0.65);
+    }
+  }
+  :root[data-theme="dark"] {
+    --deep: #051523; --mid: #0b3554; --line: #2c86b8;
+    --sand: #081c30; --card: #0e2740; --ink: #eaf2f8; --ink-soft: #a9c0d2;
+    --aqua: #37c9b6; --aqua-deep: #58e0cc;
+    --sun: #f5b64a; --sun-deep: #ffcf7d;
+    --coral: #ff7c65; --coral-deep: #ffa08e;
+    --hairline: rgba(234, 242, 248, 0.14);
+    --shadow: 0 18px 44px -18px rgba(0,0,0,0.65);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--sand); color: var(--ink);
+    font-family: 'Nunito', system-ui, sans-serif; -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  h1, h2, h3 { font-family: 'Baloo 2', 'Nunito', sans-serif; text-wrap: balance; margin: 0; }
+  button { font-family: inherit; cursor: pointer; }
+
+  .stage {
+    min-height: 100vh;
+    background: radial-gradient(120% 140% at 20% -10%, var(--line) 0%, transparent 55%), linear-gradient(165deg, var(--deep), var(--mid) 75%);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 28px 16px 48px;
+  }
+  .frame { width: 100%; max-width: 640px; }
+  .screen { display: none; }
+  .screen.active { display: block; animation: rise .35s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; color: #dcecf5; gap: 10px; flex-wrap: wrap; }
+  .topbar .brand { display: flex; align-items: center; gap: 8px; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 15px; }
+  .topbar .brand svg { width: 20px; height: 20px; stroke: var(--sun); }
+  .mode-tag {
+    font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    color: #2a1508; background: var(--sun); padding: 3px 9px; border-radius: 999px;
+  }
+  .badge-tray { display: flex; gap: 6px; align-items: center; }
+  .badge-tray .slot { width: 26px; height: 26px; border-radius: 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .badge-tray .slot.filled { background: color-mix(in srgb, var(--sun) 30%, transparent); border-color: var(--sun); }
+  .stars-live { font-size: 12.5px; font-weight: 800; color: var(--sun-deep); }
+
+  .card { background: var(--card); border: 1px solid var(--hairline); border-radius: 22px; padding: 26px 24px; box-shadow: var(--shadow); }
+
+  .title-card { text-align: center; padding: 40px 26px; }
+  .title-card .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--coral-deep); background: color-mix(in srgb, var(--coral) 14%, transparent); padding: 6px 14px; border-radius: 999px; }
+  .title-card h1 { font-size: clamp(28px, 6.6vw, 42px); margin-top: 16px; color: var(--ink); }
+  .title-card h1 span { color: var(--coral-deep); }
+  .title-card p { color: var(--ink-soft); font-size: 15px; font-weight: 600; line-height: 1.6; margin-top: 12px; max-width: 48ch; margin-left: auto; margin-right: auto; }
+  .rules { text-align: left; margin-top: 22px; display: grid; gap: 8px; }
+  .rules .rule { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; font-weight: 700; color: var(--ink-soft); }
+  .rules .rule b { color: var(--ink); }
+  .rules .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--coral); margin-top: 5px; flex: none; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; border: none; border-radius: 999px; font-weight: 800; font-size: 15px; padding: 13px 26px; margin-top: 24px; background: var(--coral); color: #fff; box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--coral) 70%, transparent); }
+  .btn:hover { background: var(--coral-deep); }
+  .btn.secondary { background: var(--aqua); box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--aqua) 70%, transparent); }
+  .btn.secondary:hover { background: var(--aqua-deep); }
+  .btn.ghost { background: transparent; border: 2px solid rgba(255,255,255,0.35); color: #eef6fb; box-shadow: none; }
+  .easy-link { display: block; margin-top: 14px; font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+  .easy-link a { color: var(--aqua-deep); }
+  .resume-note { margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--sun-deep); }
+
+  .radar-card { text-align: center; }
+  .radar { width: 168px; height: 168px; margin: 6px auto 18px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--coral) 20%, transparent) 0%, transparent 70%); border: 2px solid color-mix(in srgb, var(--coral) 45%, transparent); position: relative; overflow: hidden; }
+  .radar::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, color-mix(in srgb, var(--coral) 55%, transparent), transparent 26%); animation: sweep 1.7s linear infinite; }
+  .radar .ping { position: absolute; width: 12px; height: 12px; border-radius: 50%; background: var(--coral); box-shadow: 0 0 0 6px color-mix(in srgb, var(--coral) 30%, transparent); top: 38%; left: 58%; animation: blink .8s ease-in-out infinite; }
+  @keyframes sweep { to { transform: rotate(360deg); } }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  @media (prefers-reduced-motion: reduce) { .radar::before { animation: none; } .ping { animation: none; } }
+  .mission-kicker { font-size: 12.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--coral-deep); }
+  .radar-card h2 { font-size: 23px; margin-top: 6px; color: var(--ink); }
+  .radar-card .subject { font-size: 15px; font-weight: 700; color: var(--coral-deep); margin-top: 4px; }
+  .radar-card .flavor { font-size: 14.5px; color: var(--ink-soft); font-weight: 600; margin-top: 10px; line-height: 1.55; max-width: 46ch; margin-left: auto; margin-right: auto; }
+  .radar-card .rule-reminder { font-size: 12.5px; font-weight: 800; color: var(--coral-deep); margin-top: 10px; }
+  .rider-pick { font-size: 13px; font-weight: 800; color: var(--ink-soft); margin-top: 12px; }
+  .rider-pick b { color: var(--ink); }
+
+  .mission-card { text-align: center; }
+  .mission-topline { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; font-weight: 800; color: var(--ink-soft); margin: 2px 0 8px; }
+  .mistake-count { color: var(--coral-deep); }
+  .progressbar { height: 10px; border-radius: 999px; background: var(--hairline); overflow: hidden; margin: 4px 0 16px; }
+  .progressbar > div { height: 100%; background: linear-gradient(90deg, var(--coral), var(--coral-deep)); width: 0%; transition: width .2s ease; }
+  .scene { position: relative; width: 100%; aspect-ratio: 4 / 3; max-height: 280px; border-radius: 18px; margin: 0 auto 18px; background: linear-gradient(180deg, color-mix(in srgb, var(--aqua) 20%, var(--sand)), color-mix(in srgb, var(--mid) 40%, var(--sand))); overflow: hidden; border: 1px solid var(--hairline); }
+  .shark-svg { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%); width: 58%; }
+  .shark-svg path.body { fill: #8fa9bd; }
+  :root[data-theme="dark"] .shark-svg path.body { fill: #5f7c92; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .shark-svg path.body { fill: #5f7c92; } }
+
+  .snag { position: absolute; width: 27px; height: 27px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; transform: translate(-50%, -50%); transition: transform .15s ease, opacity .2s ease; }
+  .snag:active { transform: translate(-50%, -50%) scale(0.85); }
+  .snag.cleared { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(1.6); }
+  .snag.net { background: repeating-linear-gradient(45deg, #4a5b68, #4a5b68 3px, #6d8496 3px, #6d8496 6px); box-shadow: 0 4px 10px -4px rgba(0,0,0,.4); }
+  .snag.plastic { background: color-mix(in srgb, var(--coral) 75%, white); border: 3px solid var(--coral-deep); }
+  .snag.rubble { background: #9c8a72; border-radius: 6px; }
+  .snag.family { background: color-mix(in srgb, var(--coral) 80%, black 10%); }
+  .snag.buddy { background: var(--aqua); border: 2px solid var(--aqua-deep); font-size: 13px; }
+  .pop { position: absolute; font-size: 11px; font-weight: 800; color: var(--aqua-deep); pointer-events: none; animation: floatup .5s ease forwards; }
+  .pop.bad { color: var(--coral-deep); }
+  @keyframes floatup { to { transform: translateY(-22px); opacity: 0; } }
+
+  .steer-track { display: flex; align-items: center; justify-content: center; gap: 20px; height: 100%; position: relative; }
+  .steer-arrow { width: 28px; height: 28px; opacity: .18; transition: opacity .12s ease, transform .12s ease; }
+  .steer-arrow.live { opacity: 1; transform: scale(1.3); }
+  .steer-timer { position: absolute; top: 10px; left: 10px; right: 10px; height: 6px; border-radius: 999px; background: rgba(255,255,255,0.35); overflow: hidden; }
+  .steer-timer > div { height: 100%; background: var(--coral); width: 100%; }
+  .decoy-badge { position: absolute; top: 34px; left: 50%; transform: translateX(-50%); font-size: 26px; opacity: 0; transition: opacity .12s ease; }
+  .decoy-badge.live { opacity: 1; }
+  .steer-controls { display: flex; justify-content: center; gap: 14px; margin-top: 4px; align-items: center; }
+  .steer-btn { width: 62px; height: 62px; border-radius: 18px; border: 2px solid var(--hairline); background: var(--card); box-shadow: var(--shadow); }
+  .steer-btn svg { width: 25px; height: 25px; stroke: var(--ink); }
+  .steer-btn.flash { background: var(--aqua); border-color: var(--aqua-deep); }
+  .steer-btn.wait { width: 62px; height: 62px; border-radius: 50%; font-size: 22px; }
+  .steer-btn.wait.flash { background: var(--coral); border-color: var(--coral-deep); }
+  .steer-dots { display: flex; justify-content: center; gap: 6px; margin-top: 14px; flex-wrap: wrap; max-width: 220px; }
+  .steer-dots span { width: 9px; height: 9px; border-radius: 50%; background: var(--hairline); }
+  .steer-dots span.done { background: var(--aqua); }
+  .steer-dots span.miss { background: var(--coral); }
+
+  .mission-hint { font-size: 14px; font-weight: 700; color: var(--ink-soft); margin-top: 4px; min-height: 20px; }
+
+  .fact-card { text-align: center; }
+  .badge-reveal { width: 84px; height: 84px; border-radius: 22px; margin: 0 auto 10px; background: linear-gradient(155deg, var(--sun), var(--sun-deep)); display: flex; align-items: center; justify-content: center; font-size: 40px; box-shadow: 0 14px 26px -10px color-mix(in srgb, var(--sun) 70%, transparent); }
+  .stars-row { display: flex; justify-content: center; gap: 4px; margin-bottom: 8px; font-size: 20px; }
+  .stars-row span.off { opacity: .25; }
+  .fact-card h2 { font-size: 22px; color: var(--ink); }
+  .fact-card .badge-name { font-size: 13px; font-weight: 800; color: var(--sun-deep); text-transform: uppercase; letter-spacing: .06em; margin-top: 2px; }
+  .fact-box { margin-top: 18px; text-align: left; padding: 16px 18px; border-radius: 14px; background: color-mix(in srgb, var(--aqua) 10%, transparent); border-left: 3px solid var(--aqua); font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.6; }
+  .flashback { margin-top: 14px; text-align: left; padding: 14px 16px; border-radius: 14px; background: color-mix(in srgb, var(--coral) 10%, transparent); border-left: 3px solid var(--coral); font-size: 13.5px; font-weight: 700; color: var(--ink-soft); line-height: 1.55; }
+  .flashback b { color: var(--coral-deep); }
+
+  .finale-card { text-align: center; }
+  .rank-badge { display: inline-block; font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 6px 16px; border-radius: 999px; margin-top: 10px; }
+  .rank-gold { background: color-mix(in srgb, var(--sun) 25%, transparent); color: var(--sun-deep); }
+  .rank-silver { background: color-mix(in srgb, #9fb1bd 35%, transparent); color: #56707f; }
+  .rank-bronze { background: color-mix(in srgb, var(--coral) 20%, transparent); color: var(--coral-deep); }
+  .big-number { font-family: 'Baloo 2', sans-serif; font-size: clamp(38px, 11vw, 58px); color: var(--coral-deep); line-height: 1; margin-top: 10px; font-variant-numeric: tabular-nums; }
+  .finale-card .caption { font-size: 14px; font-weight: 700; color: var(--ink-soft); margin-top: 8px; }
+  .stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 18px; }
+  .stat-row .stat { border: 1px solid var(--hairline); border-radius: 12px; padding: 10px; }
+  .stat-row .stat b { display: block; font-family: 'Baloo 2', sans-serif; font-size: 18px; color: var(--coral-deep); }
+  .stat-row .stat span { font-size: 11px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; }
+  .badge-wall { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin: 20px 0 6px; }
+  .badge-wall .slot { aspect-ratio: 1; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 20px; background: color-mix(in srgb, var(--sun) 18%, transparent); border: 1px solid color-mix(in srgb, var(--sun) 45%, transparent); }
+  .badge-wall .slot .mini-stars { font-size: 9px; }
+  .share-panel { margin-top: 18px; padding: 18px; border-radius: 16px; background: var(--deep); color: #eef6fb; text-align: left; }
+  .share-panel h3 { font-size: 15px; color: #fff; }
+  .share-panel p { font-size: 13px; color: #c6dcea; font-weight: 600; margin-top: 6px; line-height: 1.5; }
+  .share-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  .copy-msg { font-size: 12px; font-weight: 800; color: var(--sun-deep); margin-top: 8px; height: 14px; }
+
+  @media (max-width: 480px) { .badge-wall { grid-template-columns: repeat(3, 1fr); } .stat-row { grid-template-columns: 1fr; } }
+</style>
+
+<div class="stage">
+  <div class="frame">
+    <div class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2"/></svg>
+        Manta Rider Rescue <span class="mode-tag">Challenge</span>
+      </div>
+      <div class="badge-tray"><span class="stars-live" id="starsLive">0 ⭐</span><div id="badgeTray" style="display:flex;gap:6px;"></div></div>
+    </div>
+
+    <section class="screen active" id="screen-title">
+      <div class="card title-card">
+        <span class="eyebrow">🔥 Classroom Challenge Mode</span>
+        <h1>Manta Rider Rescue: <span>Level Up</span></h1>
+        <p>Same crew, same mission — tougher waters. Free 6 sharks, dodge the decoys, and see how many stars your whole class can earn.</p>
+        <div class="rules">
+          <div class="rule"><span class="dot"></span><span><b>More to clear</b> — nets, hooks, and plastic take more taps to clear than the first mission.</span></div>
+          <div class="rule"><span class="dot"></span><span><b>Watch for decoys</b> — friendly fish and dolphins swim by. Tapping or steering into them costs you a mistake.</span></div>
+          <div class="rule"><span class="dot"></span><span><b>Earn stars</b> — 3 stars per mission for a clean run. Fewer mistakes, more stars, higher rank.</span></div>
+        </div>
+        <div><button class="btn" id="startBtn">Start the challenge →</button></div>
+        <div class="resume-note" id="resumeNote" style="display:none;"></div>
+        <div class="easy-link">Rather warm up first? <a href="https://claude.ai/code/artifact/e0573acd-29a6-4de3-b7dd-22eb0656df2e" target="_blank" rel="noopener">Play the original Manta Rider Rescue →</a></div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-radar">
+      <div class="card radar-card">
+        <div class="mission-kicker" id="radarKicker">Mission 1 of 6</div>
+        <h2>Sarah's shark finder is pinging!</h2>
+        <div class="radar"><div class="ping"></div></div>
+        <div class="subject" id="radarSubject"></div>
+        <p class="flavor" id="radarFlavor"></p>
+        <p class="rider-pick" id="radarRider"></p>
+        <div class="rule-reminder" id="radarRule"></div>
+        <button class="btn secondary" id="launchBtn">Launch the Manta Rider!</button>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-mission">
+      <div class="card mission-card">
+        <div class="mission-kicker" id="missionKicker">Mission 1 of 6</div>
+        <h2 id="missionTitle"></h2>
+        <div class="mission-topline"><span id="missionStatus">0 / 0 cleared</span><span class="mistake-count" id="missionMistakes">0 mistakes</span></div>
+        <div class="progressbar"><div id="missionProgress"></div></div>
+        <div class="scene" id="missionScene"></div>
+        <p class="mission-hint" id="missionHint"></p>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-fact">
+      <div class="card fact-card">
+        <div class="badge-reveal" id="badgeEmoji"></div>
+        <div class="stars-row" id="starsRow"></div>
+        <div class="badge-name" id="badgeName"></div>
+        <h2 id="factTitle"></h2>
+        <div class="fact-box" id="factBox"></div>
+        <div class="flashback" id="flashback" style="display:none;"></div>
+        <button class="btn" id="nextMissionBtn">Continue the mission →</button>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-finale">
+      <div class="card finale-card">
+        <div class="mission-kicker">Mission complete</div>
+        <h2>Johnny, James &amp; Sarah saved 6 sharks today.</h2>
+        <div class="rank-badge" id="rankBadge"></div>
+        <div class="stat-row">
+          <div class="stat"><b id="statStars">0/18</b><span>Stars earned</span></div>
+          <div class="stat"><b id="statMistakes">0</b><span>Total mistakes</span></div>
+          <div class="stat"><b id="statTime">0:00</b><span>Mission time</span></div>
+        </div>
+        <div class="caption" style="margin-top:20px;">But every year, real sharks lose this many:</div>
+        <div class="big-number" id="bigNumber">0</div>
+        <div class="caption">sharks killed for their fins and meat — every single year.</div>
+        <div class="badge-wall" id="badgeWall"></div>
+        <div class="share-panel">
+          <h3>Help Johnny &amp; James spread the word</h3>
+          <p>Challenge your classmates to beat your star count — and make sure they learn the 100,000,000 number too.</p>
+          <div class="share-actions">
+            <button class="btn secondary" id="copyMsgBtn" style="margin-top:0;">Copy a message to share</button>
+            <button class="btn ghost" id="replayBtn" style="margin-top:0;">Play again</button>
+          </div>
+          <div class="copy-msg" id="copyMsg"></div>
+        </div>
+        <p style="margin-top:16px;font-size:13px;font-weight:700;color:var(--ink-soft);">Read the <a href="https://claude.ai/code/artifact/b8984918-e4f7-4cc5-87b2-0a57a940ada7" target="_blank" rel="noopener" style="color:var(--aqua-deep);">Shark Rescue Mission briefing</a> for the real facts behind every mission.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "manta-rider-rescue-challenge-v1";
+
+  var MISSIONS = [
+    {
+      title: "Ghost Net Tangle", subject: "Reef Shark", character: "Johnny",
+      flavor: "Sarah's shark finder found a reef shark caught in an old, abandoned fishing net drifting near the reef. This net is bigger than the last one — and a curious remora keeps swimming through it.",
+      mechanic: "free", snagType: "net", snagCount: 9, decoyCount: 3, decoyLabel: "remora",
+      badge: { name: "Net Cutter", emoji: "🕸️" },
+      factTitle: "Real sharks get tangled too",
+      fact: "Old or lost fishing nets — called \"ghost nets\" — keep trapping sea life long after fishers leave them behind. Many sharks caught this way were never the target at all; scientists call this bycatch."
+    },
+    {
+      title: "The Longline Hook", subject: "Great White Shark", character: "James",
+      flavor: "A poacher's fishing line has hooked a great white shark. James has to steer the Manta Rider fast through the current — and let the passing dolphins swim by untouched.",
+      mechanic: "steer", rounds: 8, decoyRounds: 2,
+      badge: { name: "Hook Breaker", emoji: "🪝" },
+      factTitle: "This is the big one",
+      fact: "Between shark fin soup and hunting for sport, people kill at least 100,000,000 sharks every single year — while fewer than 10 people die from shark attacks in that same year.",
+      flashback: "This is the exact number Koki reports in Wild Kratts: \"Stuck on Sharks\" — the episode that kicked off this whole mission. It's a real, scientifically-estimated figure, not just a cartoon line."
+    },
+    {
+      title: "Plastic Rings", subject: "Hammerhead Shark", character: "Johnny",
+      flavor: "A young hammerhead is caught in plastic rings floating near the surface. A few harmless jellyfish are drifting through the same water — leave them be.",
+      mechanic: "free", snagType: "plastic", snagCount: 8, decoyCount: 3, decoyLabel: "jelly",
+      badge: { name: "Plastic Fighter", emoji: "♻️" },
+      factTitle: "Plastic hurts sharks too",
+      fact: "Plastic rings, bags, and rope don't just float away harmlessly — they trap and injure sharks and other sea animals for years. Using less plastic and cleaning up beaches helps keep shark habitats safe."
+    },
+    {
+      title: "Bleached Nursery", subject: "Baby Nurse Sharks", character: "James",
+      flavor: "The coral nursery where baby nurse sharks grow up is crumbling from warming water. James has to clear the rubble fast — but living coral polyps are mixed in, and those must stay put.",
+      mechanic: "free", snagType: "rubble", snagCount: 9, decoyCount: 3, decoyLabel: "coral",
+      badge: { name: "Reef Builder", emoji: "🪸" },
+      factTitle: "Baby sharks need safe nurseries",
+      fact: "Many baby sharks grow up in shallow reefs and mangroves. When those nurseries are damaged by warming oceans or coastal development, fewer pups survive to adulthood — even if no one hunts them at all."
+    },
+    {
+      title: "Poacher Chase", subject: "Whale Shark", character: "Johnny",
+      flavor: "A finning boat is chasing a gentle whale shark. Johnny has to weave the Manta Rider fast between them — while sea turtles cross the current too.",
+      mechanic: "steer", rounds: 8, decoyRounds: 2,
+      badge: { name: "Wave Rider", emoji: "🌊" },
+      factTitle: "Sanctuaries stop the chase",
+      fact: "Countries that create shark sanctuaries make it illegal to hunt sharks in their waters at all. Sanctuaries give populations a real, protected place to recover from years of overfishing."
+    },
+    {
+      title: "Guardian of the Deep", subject: "Mother Great White & Pups", character: "James",
+      flavor: "The great white shark from the very first mission is about to have her pups — but old fishing line is tangled everywhere near her fins, mixed in with strands of loose kelp.",
+      mechanic: "free", snagType: "family", snagCount: 9, decoyCount: 3, decoyLabel: "kelp",
+      badge: { name: "Guardian of the Deep", emoji: "🛡️" },
+      factTitle: "Why every shark counts",
+      fact: "Sharks grow slowly and have very few pups — some wait 15+ years for their first litter. That means every adult shark saved matters far more than it would for a fish that lays thousands of eggs."
+    }
+  ];
+
+  var DECOY_ICON = { remora: "🐟", jelly: "🪼", coral: "🌱", kelp: "🌿" };
+
+  var els = {};
+  ["screen-title","screen-radar","screen-mission","screen-fact","screen-finale"].forEach(function (id) {
+    els[id] = document.getElementById(id);
+  });
+  var badgeTray = document.getElementById("badgeTray");
+  var starsLive = document.getElementById("starsLive");
+  var startBtn = document.getElementById("startBtn");
+  var launchBtn = document.getElementById("launchBtn");
+  var nextMissionBtn = document.getElementById("nextMissionBtn");
+  var replayBtn = document.getElementById("replayBtn");
+  var copyMsgBtn = document.getElementById("copyMsgBtn");
+  var resumeNote = document.getElementById("resumeNote");
+
+  var state = { current: 0, earnedBadges: [], stars: {}, totalMistakes: 0, startTime: 0 };
+  var missionMistakes = 0;
+
+  function loadState() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if (saved) {
+        state.earnedBadges = Array.isArray(saved.earnedBadges) ? saved.earnedBadges : [];
+        state.stars = saved.stars || {};
+      }
+    } catch (e) {}
+  }
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ earnedBadges: state.earnedBadges, stars: state.stars })); } catch (e) {}
+  }
+
+  function totalStars() {
+    var t = 0;
+    Object.keys(state.stars).forEach(function (k) { t += state.stars[k]; });
+    return t;
+  }
+
+  function renderBadgeTray() {
+    badgeTray.innerHTML = "";
+    MISSIONS.forEach(function (m, i) {
+      var slot = document.createElement("div");
+      slot.className = "slot" + (state.earnedBadges.indexOf(i) > -1 ? " filled" : "");
+      slot.textContent = state.earnedBadges.indexOf(i) > -1 ? m.badge.emoji : "";
+      badgeTray.appendChild(slot);
+    });
+    starsLive.textContent = totalStars() + " / " + (MISSIONS.length * 3) + " ⭐";
+  }
+
+  function showScreen(id) {
+    Object.keys(els).forEach(function (k) { els[k].classList.remove("active"); });
+    els[id].classList.add("active");
+  }
+
+  function init() {
+    loadState();
+    renderBadgeTray();
+    if (state.earnedBadges.length === MISSIONS.length) {
+      resumeNote.style.display = "block";
+      resumeNote.textContent = "You've completed the challenge with " + totalStars() + " stars! Play again to beat your score.";
+    }
+  }
+
+  startBtn.addEventListener("click", function () {
+    state.current = 0;
+    state.totalMistakes = 0;
+    state.startTime = Date.now();
+    goToRadar();
+  });
+
+  function goToRadar() {
+    var m = MISSIONS[state.current];
+    document.getElementById("radarKicker").textContent = "Mission " + (state.current + 1) + " of " + MISSIONS.length;
+    document.getElementById("radarSubject").textContent = m.subject;
+    document.getElementById("radarFlavor").textContent = m.flavor;
+    document.getElementById("radarRider").innerHTML = "<b>" + m.character + "</b> hops on the Manta Rider.";
+    document.getElementById("radarRule").textContent = m.mechanic === "free"
+      ? "Clear every real snag — don't tap the decoys!"
+      : "Tap the matching side fast — but let decoys swim by untouched!";
+    showScreen("screen-radar");
+  }
+
+  launchBtn.addEventListener("click", function () {
+    missionMistakes = 0;
+    startMission(MISSIONS[state.current]);
+  });
+
+  function startMission(m) {
+    document.getElementById("missionKicker").textContent = "Mission " + (state.current + 1) + " of " + MISSIONS.length;
+    document.getElementById("missionTitle").textContent = m.title;
+    document.getElementById("missionProgress").style.width = "0%";
+    document.getElementById("missionMistakes").textContent = "0 mistakes";
+    var scene = document.getElementById("missionScene");
+    scene.innerHTML = "";
+    var oldControls = document.getElementById("steerControlsWrap");
+    if (oldControls) oldControls.remove();
+    showScreen("screen-mission");
+
+    if (m.mechanic === "free") {
+      document.getElementById("missionHint").textContent = "Tap each real snag to free the shark — avoid the " + m.decoyLabel + "!";
+      document.getElementById("missionStatus").textContent = "0 / " + m.snagCount + " cleared";
+      buildFreeMission(scene, m);
+    } else {
+      document.getElementById("missionHint").textContent = "Tap the side that lights up!";
+      document.getElementById("missionStatus").textContent = "0 / " + m.rounds + " rounds";
+      buildSteerMission(scene, m);
+    }
+  }
+
+  function sharkSvg() {
+    return '<svg class="shark-svg" viewBox="0 0 200 100" aria-hidden="true">' +
+      '<path class="body" d="M10 60 C 30 30, 80 20, 120 30 C 150 15, 175 20, 190 35 C 178 40, 165 42, 155 40 C 150 55, 130 70, 100 72 C 60 76, 25 70, 10 60 Z"/>' +
+      '<circle cx="45" cy="45" r="3" fill="#1a2733"/>' +
+      '</svg>';
+  }
+
+  var POS_POOL = [
+    [14,20],[38,12],[62,12],[86,20],[92,42],[92,66],
+    [78,84],[54,90],[30,90],[10,66],[8,42],[50,26]
+  ];
+
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function markMistake() {
+    missionMistakes++;
+    document.getElementById("missionMistakes").textContent = missionMistakes + (missionMistakes === 1 ? " mistake" : " mistakes");
+  }
+
+  function buildFreeMission(scene, m) {
+    scene.insertAdjacentHTML("beforeend", sharkSvg());
+    var cleared = 0;
+    var total = m.snagCount + m.decoyCount;
+    var positions = shuffle(POS_POOL.slice(0, total));
+    var kinds = [];
+    for (var i = 0; i < m.snagCount; i++) kinds.push("real");
+    for (var j = 0; j < m.decoyCount; j++) kinds.push("decoy");
+    kinds = shuffle(kinds);
+
+    kinds.forEach(function (kind, idx) {
+      var pos = positions[idx];
+      var btn = document.createElement("button");
+      btn.className = "snag " + (kind === "decoy" ? "buddy" : m.snagType);
+      if (kind === "decoy") btn.textContent = DECOY_ICON[m.decoyLabel] || "🐟";
+      btn.style.left = pos[0] + "%";
+      btn.style.top = pos[1] + "%";
+      btn.setAttribute("aria-label", kind === "decoy" ? "Leave this be" : "Clear obstruction");
+      btn.addEventListener("click", function onClick() {
+        if (btn.classList.contains("cleared")) return;
+        btn.classList.add("cleared");
+        var pop = document.createElement("div");
+        pop.style.left = btn.style.left; pop.style.top = btn.style.top;
+        if (kind === "decoy") {
+          pop.className = "pop bad"; pop.textContent = "oops!";
+          markMistake();
+        } else {
+          pop.className = "pop"; pop.textContent = "free!";
+          cleared++;
+          document.getElementById("missionStatus").textContent = cleared + " / " + m.snagCount + " cleared";
+          document.getElementById("missionProgress").style.width = Math.round((cleared / m.snagCount) * 100) + "%";
+        }
+        scene.appendChild(pop);
+        setTimeout(function () { pop.remove(); }, 500);
+        if (cleared === m.snagCount) setTimeout(function () { completeMission(m); }, 450);
+      });
+      scene.appendChild(btn);
+    });
+  }
+
+  function buildSteerMission(scene, m) {
+    scene.insertAdjacentHTML("beforeend",
+      '<div class="steer-timer"><div id="steerTimerBar"></div></div>' +
+      '<div class="decoy-badge" id="decoyBadge">🐬</div>' +
+      '<div class="steer-track">' +
+        '<svg class="steer-arrow" id="arrowLeft" viewBox="0 0 24 24" fill="none" stroke="#0e4d74" stroke-width="2.5"><path d="M15 5l-7 7 7 7"/></svg>' +
+        sharkSvg() +
+        '<svg class="steer-arrow" id="arrowRight" viewBox="0 0 24 24" fill="none" stroke="#0e4d74" stroke-width="2.5"><path d="M9 5l7 7-7 7"/></svg>' +
+      '</div>'
+    );
+    var wrap = document.createElement("div");
+    wrap.id = "steerControlsWrap";
+    wrap.innerHTML =
+      '<div class="steer-controls">' +
+        '<button class="steer-btn" id="btnLeft" aria-label="Steer left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 5l-7 7 7 7"/></svg></button>' +
+        '<button class="steer-btn wait" id="btnWait" aria-label="Let it pass">⏸</button>' +
+        '<button class="steer-btn" id="btnRight" aria-label="Steer right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 5l7 7-7 7"/></svg></button>' +
+      '</div>' +
+      '<div class="steer-dots" id="steerDots"></div>';
+    document.getElementById("missionScene").insertAdjacentElement("afterend", wrap);
+
+    var dotsWrap = wrap.querySelector("#steerDots");
+    for (var i = 0; i < m.rounds; i++) { dotsWrap.appendChild(document.createElement("span")); }
+
+    var roundTypes = [];
+    for (var r = 0; r < m.rounds; r++) roundTypes.push(r === 0 || r === m.rounds - 1 ? "side" : "pending");
+    var decoysLeft = m.decoyRounds;
+    for (var p = 1; p < m.rounds - 1 && decoysLeft > 0; p++) {
+      if (roundTypes[p] === "pending" && Math.random() < 0.5) { roundTypes[p] = "decoy"; decoysLeft--; }
+    }
+    roundTypes = roundTypes.map(function (t) { return t === "pending" ? "side" : t; });
+
+    var round = 0, live = null, decoyActive = false, timeout1;
+    var timerEl = document.getElementById("steerTimerBar");
+    var decoyBadge = document.getElementById("decoyBadge");
+    var windowMs;
+
+    function nextRound() {
+      if (round >= m.rounds) {
+        wrap.remove();
+        completeMission(m);
+        return;
+      }
+      windowMs = Math.max(650, 1300 - round * 80);
+      var type = roundTypes[round];
+      timerEl.style.transition = "none";
+      timerEl.style.width = "100%";
+      requestAnimationFrame(function () {
+        timerEl.style.transition = "width " + windowMs + "ms linear";
+        timerEl.style.width = "0%";
+      });
+
+      if (type === "decoy") {
+        decoyActive = true; live = null;
+        decoyBadge.classList.add("live");
+        document.getElementById("missionHint").textContent = "A dolphin! Let it pass — press Wait.";
+        timeout1 = setTimeout(function () { finishRound(true, "decoy"); }, windowMs);
+      } else {
+        live = Math.random() < 0.5 ? "left" : "right";
+        var arrow = document.getElementById(live === "left" ? "arrowLeft" : "arrowRight");
+        arrow.classList.add("live");
+        document.getElementById("missionHint").textContent = "Tap the side that lit up!";
+        timeout1 = setTimeout(function () { finishRound(false, live); }, windowMs);
+      }
+    }
+
+    function finishRound(success, expected) {
+      clearTimeout(timeout1);
+      document.getElementById("arrowLeft").classList.remove("live");
+      document.getElementById("arrowRight").classList.remove("live");
+      decoyBadge.classList.remove("live");
+      decoyActive = false; live = null;
+      dotsWrap.children[round].classList.add(success ? "done" : "miss");
+      if (!success) markMistake();
+      round++;
+      document.getElementById("missionStatus").textContent = round + " / " + m.rounds + " rounds";
+      document.getElementById("missionProgress").style.width = Math.round((round / m.rounds) * 100) + "%";
+      setTimeout(nextRound, 260);
+    }
+
+    function pressed(side) {
+      var btnId = side === "left" ? "btnLeft" : side === "right" ? "btnRight" : "btnWait";
+      var btn = document.getElementById(btnId);
+      btn.classList.add("flash");
+      setTimeout(function () { btn.classList.remove("flash"); }, 150);
+      if (decoyActive) {
+        if (side === "wait") finishRound(true, "decoy");
+        else finishRound(false, "decoy");
+        return;
+      }
+      if (!live) return;
+      if (side === live) finishRound(true, live);
+      else finishRound(false, live);
+    }
+
+    wrap.querySelector("#btnLeft").addEventListener("click", function () { pressed("left"); });
+    wrap.querySelector("#btnRight").addEventListener("click", function () { pressed("right"); });
+    wrap.querySelector("#btnWait").addEventListener("click", function () { pressed("wait"); });
+
+    function keyHandler(e) {
+      if (!document.getElementById("screen-mission").classList.contains("active")) {
+        window.removeEventListener("keydown", keyHandler);
+        return;
+      }
+      if (e.key === "ArrowLeft") pressed("left");
+      if (e.key === "ArrowRight") pressed("right");
+      if (e.key === " " || e.key === "ArrowDown") pressed("wait");
+    }
+    window.addEventListener("keydown", keyHandler);
+
+    nextRound();
+  }
+
+  function starsForMistakes(n) {
+    if (n === 0) return 3;
+    if (n <= 2) return 2;
+    return 1;
+  }
+
+  function completeMission(m) {
+    var stars = starsForMistakes(missionMistakes);
+    state.stars[state.current] = stars;
+    state.totalMistakes += missionMistakes;
+    if (state.earnedBadges.indexOf(state.current) === -1) state.earnedBadges.push(state.current);
+    saveState();
+    renderBadgeTray();
+
+    document.getElementById("badgeEmoji").textContent = m.badge.emoji;
+    var starsRow = document.getElementById("starsRow");
+    starsRow.innerHTML = "";
+    for (var i = 0; i < 3; i++) {
+      var s = document.createElement("span");
+      s.textContent = "⭐"; if (i >= stars) s.classList.add("off");
+      starsRow.appendChild(s);
+    }
+    document.getElementById("badgeName").textContent = m.badge.name + " badge earned — " + missionMistakes + (missionMistakes === 1 ? " mistake" : " mistakes");
+    document.getElementById("factTitle").textContent = m.factTitle;
+    document.getElementById("factBox").textContent = m.fact;
+    var fb = document.getElementById("flashback");
+    if (m.flashback) { fb.style.display = "block"; fb.innerHTML = "<b>Flashback:</b> " + m.flashback; }
+    else { fb.style.display = "none"; }
+    nextMissionBtn.textContent = state.current === MISSIONS.length - 1 ? "See the mission results →" : "Continue the mission →";
+    showScreen("screen-fact");
+  }
+
+  nextMissionBtn.addEventListener("click", function () {
+    state.current++;
+    if (state.current >= MISSIONS.length) showFinale();
+    else goToRadar();
+  });
+
+  function showFinale() {
+    renderBadgeTray();
+    var wall = document.getElementById("badgeWall");
+    wall.innerHTML = "";
+    MISSIONS.forEach(function (m, i) {
+      var slot = document.createElement("div");
+      slot.className = "slot";
+      var stars = state.stars[i] || 0;
+      slot.innerHTML = m.badge.emoji + '<span class="mini-stars">' + "⭐".repeat(stars) + "</span>";
+      slot.title = m.badge.name;
+      wall.appendChild(slot);
+    });
+    var ts = totalStars();
+    var rank = ts >= 16 ? "gold" : ts >= 11 ? "silver" : "bronze";
+    var rankLabel = { gold: "🏆 Gold Ranger", silver: "🥈 Silver Ranger", bronze: "🥉 Bronze Ranger" }[rank];
+    var rb = document.getElementById("rankBadge");
+    rb.className = "rank-badge rank-" + rank;
+    rb.textContent = rankLabel;
+    document.getElementById("statStars").textContent = ts + "/" + (MISSIONS.length * 3);
+    document.getElementById("statMistakes").textContent = state.totalMistakes;
+    var elapsed = Math.max(0, Math.round((Date.now() - state.startTime) / 1000));
+    var mm = Math.floor(elapsed / 60), ss = elapsed % 60;
+    document.getElementById("statTime").textContent = mm + ":" + (ss < 10 ? "0" : "") + ss;
+    showScreen("screen-finale");
+    animateBigNumber();
+  }
+
+  function animateBigNumber() {
+    var el = document.getElementById("bigNumber");
+    var target = 100000000, start = null, duration = 1800;
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min(1, (ts - start) / duration);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(eased * target).toLocaleString();
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  copyMsgBtn.addEventListener("click", function () {
+    var ts = totalStars();
+    var msg = "I just earned " + ts + "/18 stars in Manta Rider Rescue: Classroom Challenge and learned that about 100,000,000 sharks are killed every year. Beat my score: " + location.href;
+    var note = document.getElementById("copyMsg");
+    function shown(text) { note.textContent = text; setTimeout(function () { note.textContent = ""; }, 2500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(msg).then(function () { shown("Copied! Paste it to a friend."); }, function () { shown(msg); });
+    } else { shown(msg); }
+  });
+
+  replayBtn.addEventListener("click", function () {
+    state.current = 0;
+    state.totalMistakes = 0;
+    state.startTime = Date.now();
+    goToRadar();
+  });
+
+  init();
+})();
+</script>

@@ -10,6 +10,12 @@ rescue mini-game built from the same research.
   James & Sarah. Free 6 threatened sharks, earn badges, and learn why 100
   million sharks are killed every year. Published version:
   https://claude.ai/code/artifact/e0573acd-29a6-4de3-b7dd-22eb0656df2e
+- `game-challenge.html` — **Manta Rider Rescue: Classroom Challenge**, a harder
+  version of the same game for older kids/classmates: more snags per mission,
+  faster reflex rounds, decoys you must avoid, and a mistake-based star/rank
+  system (Bronze/Silver/Gold) so classmates can compare scores. The original
+  `game.html` is unchanged. Published version:
+  https://claude.ai/code/artifact/5551c687-a41f-48fe-9f76-550c4dd444d1
 
 ## Inspiration
 
