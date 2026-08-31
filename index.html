@@ -1,0 +1,401 @@
+<title>Shark Rescue Mission</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,700&display=swap');
+
+  :root {
+    --ocean-deep: #0b2540;
+    --ocean-mid: #114b78;
+    --ocean-line: #1c6e9c;
+    --sand: #f6efe1;
+    --sand-card: #fffaf0;
+    --ink: #0d1b2a;
+    --ink-soft: #3a4a5a;
+    --aqua: #1fa998;
+    --aqua-deep: #0f7a6d;
+    --coral: #ee5a45;
+    --coral-deep: #c73f2d;
+    --gold: #e8a13a;
+    --hairline: rgba(13, 27, 42, 0.14);
+    --shadow: 0 18px 40px -22px rgba(11, 37, 64, 0.45);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ocean-deep: #061626;
+      --ocean-mid: #0d2e4a;
+      --ocean-line: #2c86b8;
+      --sand: #081c30;
+      --sand-card: #0e2740;
+      --ink: #eaf2f8;
+      --ink-soft: #a9c0d2;
+      --aqua: #37c9b6;
+      --aqua-deep: #58e0cc;
+      --coral: #ff7c65;
+      --coral-deep: #ffa08e;
+      --gold: #f0b656;
+      --hairline: rgba(234, 242, 248, 0.14);
+      --shadow: 0 18px 44px -20px rgba(0, 0, 0, 0.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ocean-deep: #061626;
+    --ocean-mid: #0d2e4a;
+    --ocean-line: #2c86b8;
+    --sand: #081c30;
+    --sand-card: #0e2740;
+    --ink: #eaf2f8;
+    --ink-soft: #a9c0d2;
+    --aqua: #37c9b6;
+    --aqua-deep: #58e0cc;
+    --coral: #ff7c65;
+    --coral-deep: #ffa08e;
+    --gold: #f0b656;
+    --hairline: rgba(234, 242, 248, 0.14);
+    --shadow: 0 18px 44px -20px rgba(0, 0, 0, 0.6);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--sand);
+    color: var(--ink);
+    font-family: 'Nunito', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px 80px; }
+
+  h1, h2, h3 { font-family: 'Baloo 2', 'Nunito', system-ui, sans-serif; text-wrap: balance; margin: 0; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    background:
+      radial-gradient(120% 140% at 15% -10%, var(--ocean-line) 0%, transparent 55%),
+      linear-gradient(160deg, var(--ocean-deep), var(--ocean-mid) 70%);
+    color: #eef6fb;
+    padding: 56px 20px 92px;
+    overflow: hidden;
+  }
+  .hero__wrap { max-width: 880px; margin: 0 auto; position: relative; z-index: 2; }
+  .hero__eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-weight: 800; font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(232, 161, 58, 0.14);
+    border: 1px solid rgba(232, 161, 58, 0.35);
+    padding: 6px 14px; border-radius: 999px;
+  }
+  .hero__eyebrow svg { width: 14px; height: 14px; }
+  .hero h1 {
+    font-size: clamp(36px, 6.4vw, 58px);
+    font-weight: 800;
+    line-height: 1.03;
+    margin-top: 18px;
+    color: #fff;
+  }
+  .hero h1 span { color: var(--aqua-deep); }
+  .hero p {
+    font-size: 18px; line-height: 1.55; color: #cfe3ef;
+    max-width: 56ch; margin-top: 14px; font-weight: 600;
+  }
+  .hero__stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    margin-top: 34px;
+  }
+  .hero__stat {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 16px;
+    padding: 16px;
+    backdrop-filter: blur(2px);
+  }
+  .hero__stat b {
+    display: block; font-family: 'Baloo 2', sans-serif; font-size: 26px;
+    color: var(--aqua-deep); line-height: 1;
+  }
+  .hero__stat span { display: block; margin-top: 6px; font-size: 13px; color: #b9d1e2; font-weight: 700; }
+
+  .fin-row { position: absolute; inset: auto 0 0 0; height: 64px; z-index: 1; opacity: .5; }
+  .fin-row svg { width: 100%; height: 100%; display: block; }
+
+  /* ---------- Sections ---------- */
+  section { padding: 52px 0 0; }
+  .kicker {
+    font-weight: 800; font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--aqua-deep);
+  }
+  .section-title { font-size: clamp(24px, 3.6vw, 32px); font-weight: 700; margin-top: 6px; color: var(--ink); }
+  .section-lede { color: var(--ink-soft); font-size: 16px; line-height: 1.6; margin-top: 10px; max-width: 62ch; font-weight: 600; }
+
+  /* ---------- Threat cards ---------- */
+  .threats {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 28px;
+  }
+  .threat {
+    background: var(--sand-card);
+    border: 1px solid var(--hairline);
+    border-radius: 18px;
+    padding: 20px 20px 18px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  .threat__icon {
+    width: 40px; height: 40px; border-radius: 12px;
+    background: color-mix(in srgb, var(--coral) 16%, transparent);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .threat__icon svg { width: 22px; height: 22px; stroke: var(--coral-deep); }
+  .threat h3 { font-size: 18px; font-weight: 700; color: var(--ink); }
+  .threat p { font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); margin: 8px 0 0; font-weight: 600; }
+  .threat__tag {
+    display: inline-block; margin-top: 12px; font-size: 12px; font-weight: 800;
+    color: var(--coral-deep); background: color-mix(in srgb, var(--coral) 14%, transparent);
+    padding: 4px 10px; border-radius: 999px; letter-spacing: .02em;
+  }
+
+  /* ---------- Powers ---------- */
+  .powers { margin-top: 28px; display: grid; gap: 12px; }
+  .power {
+    display: grid; grid-template-columns: 44px 1fr; gap: 16px;
+    background: var(--sand-card); border: 1px solid var(--hairline);
+    border-radius: 16px; padding: 16px 18px; box-shadow: var(--shadow);
+    align-items: start;
+  }
+  .power__num {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(155deg, var(--aqua), var(--aqua-deep));
+    color: #06251f; font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 17px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .power h3 { font-size: 16.5px; font-weight: 700; color: var(--ink); }
+  .power p { font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); margin: 4px 0 0; font-weight: 600; }
+
+  /* ---------- Mission checklist ---------- */
+  .mission {
+    margin-top: 28px;
+    background: linear-gradient(165deg, var(--ocean-deep), var(--ocean-mid));
+    border-radius: 22px; padding: 28px 24px 26px; color: #eef6fb;
+    box-shadow: var(--shadow);
+  }
+  .mission__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .mission h2 { color: #fff; font-size: 22px; }
+  .mission__progress { font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 14px; color: var(--gold); }
+  .mission p.lede { color: #c6dcea; font-size: 14.5px; margin-top: 6px; font-weight: 600; }
+  .checklist { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 10px; }
+  .checklist li {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 12px; padding: 12px 14px;
+    cursor: pointer; transition: background .15s ease;
+    font-weight: 700; font-size: 14.5px;
+  }
+  .checklist li:hover { background: rgba(255,255,255,0.1); }
+  .checklist input { display: none; }
+  .checklist .box {
+    width: 22px; height: 22px; border-radius: 7px; flex: none;
+    border: 2px solid rgba(255,255,255,0.5);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .checklist input:checked ~ .box { background: var(--aqua); border-color: var(--aqua); }
+  .checklist input:checked ~ .box::after { content: "✓"; color: #06251f; font-weight: 800; font-size: 14px; }
+  .checklist input:checked ~ .label { text-decoration: line-through; opacity: .6; }
+  .checklist .label { color: #eef6fb; }
+  .checklist li:focus-within { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  /* ---------- Facts strip ---------- */
+  .facts {
+    margin-top: 28px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  }
+  .fact {
+    border: 1px dashed var(--hairline); border-radius: 16px; padding: 16px;
+  }
+  .fact b { display: block; font-family: 'Baloo 2', sans-serif; font-size: 15px; color: var(--aqua-deep); margin-bottom: 6px; }
+  .fact span { font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; font-weight: 600; display: block; }
+
+  footer {
+    margin-top: 52px; padding-top: 22px; border-top: 1px solid var(--hairline);
+    font-size: 12.5px; color: var(--ink-soft); line-height: 1.8;
+  }
+  footer a { color: var(--aqua-deep); }
+  footer .src-list { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 6px; }
+
+  @media (max-width: 620px) {
+    .threats, .hero__stats, .facts { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .threat, .power { transition: transform .18s ease; }
+    .threat:hover, .power:hover { transform: translateY(-2px); }
+  }
+</style>
+
+<div class="hero">
+  <div class="hero__wrap">
+    <span class="hero__eyebrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2"/></svg>
+      Field Mission Briefing
+    </span>
+    <h1>Operation: Save the <span>Sharks</span></h1>
+    <p>Sharks have swum the oceans for over 400 million years — longer than trees have existed. Now more than a third of shark and ray species are at risk of disappearing forever. Your mission: find out why, and figure out how to help.</p>
+    <div class="hero__stats">
+      <div class="hero__stat"><b>37%</b><span>of shark, ray &amp; chimaera species are threatened with extinction</span></div>
+      <div class="hero__stat"><b>~100M</b><span>sharks killed by people every single year</span></div>
+      <div class="hero__stat"><b>500+</b><span>shark species alive today, most too little studied</span></div>
+    </div>
+  </div>
+  <div class="fin-row" aria-hidden="true">
+    <svg viewBox="0 0 400 60" preserveAspectRatio="none">
+      <path d="M0 60 L30 20 L55 60 Z M120 60 L150 15 L178 60 Z M250 60 L275 28 L300 60 Z M340 60 L365 22 L392 60 Z" fill="#ffffff" opacity="0.5"/>
+    </svg>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <div class="kicker">Case File 01</div>
+    <h2 class="section-title">Why sharks matter</h2>
+    <p class="section-lede">Sharks are apex predators — the ocean's clean-up crew and referees. They keep fish populations balanced and coral reefs and seagrass beds healthy. When sharks disappear, the whole ocean food web starts to wobble.</p>
+  </section>
+
+  <section>
+    <div class="kicker">Case File 02</div>
+    <h2 class="section-title">The threats sharks are facing</h2>
+    <p class="section-lede">Sharks grow slowly, mature late, and have very few pups — so when too many are killed, populations can't bounce back quickly. Here's what's putting them in danger.</p>
+
+    <div class="threats">
+      <div class="threat">
+        <div class="threat__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h11M14 12l7-4v8l-7-4Z"/></svg></div>
+        <h3>Shark finning</h3>
+        <p>Sharks are caught only for their fins — used in shark fin soup — and the rest of the body is often thrown back. It's the single biggest reason shark numbers are dropping.</p>
+        <span class="threat__tag">Biggest threat</span>
+      </div>
+      <div class="threat">
+        <div class="threat__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        <h3>Bycatch</h3>
+        <p>Huge fishing nets and long lines set for tuna or shrimp accidentally trap sharks too. Most were never the target — they're caught by mistake.</p>
+        <span class="threat__tag">Accidental</span>
+      </div>
+      <div class="threat">
+        <div class="threat__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M4 8h16M4 16h16"/></svg></div>
+        <h3>Habitat loss</h3>
+        <p>Coastal development, damaged coral reefs, and warming water destroy the nursery grounds baby sharks need to grow up safely.</p>
+        <span class="threat__tag">Growing risk</span>
+      </div>
+      <div class="threat">
+        <div class="threat__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+        <h3>Slow to recover</h3>
+        <p>Some sharks take 15+ years to have their first pup, and have only a handful at a time. Losing adults faster than they can reproduce pushes species toward extinction.</p>
+        <span class="threat__tag">Biology works against them</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="kicker">Case File 03</div>
+    <h2 class="section-title">Creature powers: how people help sharks</h2>
+    <p class="section-lede">Just like the team activates a creature power to solve a rescue, here's the real-world "powers" scientists, governments, and everyday people use to protect sharks.</p>
+
+    <div class="powers">
+      <div class="power">
+        <div class="power__num">1</div>
+        <div><h3>Sanctuaries &amp; protected waters</h3><p>Countries create shark sanctuaries and Marine Protected Areas where fishing for sharks is banned entirely, giving populations a safe place to recover.</p></div>
+      </div>
+      <div class="power">
+        <div class="power__num">2</div>
+        <div><h3>Finning bans &amp; fishing limits</h3><p>Laws that require sharks to be landed with fins still attached, and catch limits on threatened species, make illegal finning much harder to hide.</p></div>
+      </div>
+      <div class="power">
+        <div class="power__num">3</div>
+        <div><h3>Bycatch-safe fishing gear</h3><p>Circle hooks, escape hatches in nets, and "shark-safe" fishing lines let accidentally-caught sharks swim free instead of dying on the line.</p></div>
+      </div>
+      <div class="power">
+        <div class="power__num">4</div>
+        <div><h3>Choosing sustainable seafood</h3><p>Families can pick seafood certified sustainable (and skip shark meat, cartilage pills, or fin products), which lowers demand that drives overfishing.</p></div>
+      </div>
+      <div class="power">
+        <div class="power__num">5</div>
+        <div><h3>Shark science &amp; tracking</h3><p>Tagging and tracking sharks tells scientists where they feed and raise their young, so protections can go exactly where sharks need them most.</p></div>
+      </div>
+      <div class="power">
+        <div class="power__num">6</div>
+        <div><h3>Telling everyone why sharks matter</h3><p>Fear sells shark products; understanding protects sharks. Documentaries, aquariums, and kids teaching other kids all shrink the demand that hurts sharks.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="mission">
+      <div class="mission__head">
+        <h2>Your mission checklist</h2>
+        <span class="mission__progress" id="progress">0 / 6 activated</span>
+      </div>
+      <p class="lede">Check off each power as you and your team complete it this week.</p>
+      <ul class="checklist" id="checklist">
+        <li><label style="display:flex;align-items:center;gap:12px;width:100%;cursor:pointer;"><input type="checkbox" data-key="c1"/><span class="box"></span><span class="label">Watch a shark documentary or read a shark book together</span></label></li>
+        <li><label style="display:flex;align-items:center;gap:12px;width:100%;cursor:pointer;"><input type="checkbox" data-key="c2"/><span class="box"></span><span class="label">Check that dinner tonight uses sustainable seafood</span></label></li>
+        <li><label style="display:flex;align-items:center;gap:12px;width:100%;cursor:pointer;"><input type="checkbox" data-key="c3"/><span class="box"></span><span class="label">Skip anything made with shark fin or shark cartilage</span></label></li>
+        <li><label style="display:flex;align-items:center;gap:12px;width:100%;cursor:pointer;"><input type="checkbox" data-key="c4"/><span class="box"></span><span class="label">Draw or tell 3 friends one fact about why sharks matter</span></label></li>
+        <li><label style="display:flex;align-items:center;gap:12px;width:100%;cursor:pointer;"><input type="checkbox" data-key="c5"/><span class="box"></span><span class="label">Pick up trash or reduce plastic — it protects shark habitats too</span></label></li>
+        <li><label style="display:flex;align-items:center;gap:12px;width:100%;cursor:pointer;"><input type="checkbox" data-key="c6"/><span class="box"></span><span class="label">Look up a real shark sanctuary and find it on a map</span></label></li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="kicker">Field Notes</div>
+    <h2 class="section-title">Quick shark facts</h2>
+    <div class="facts">
+      <div class="fact"><b>Older than trees</b><span>Sharks first appeared over 400 million years ago, before trees existed on Earth.</span></div>
+      <div class="fact"><b>Rays are family</b><span>Rays and chimaeras are shark relatives — and many are in even more danger than sharks.</span></div>
+      <div class="fact"><b>Keystone predators</b><span>Removing sharks can cause smaller predator numbers to explode, throwing off the whole food chain.</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <div>Sources: shark and ray extinction-risk figures from the IUCN Shark Specialist Group's Global Status report; annual mortality estimates from peer-reviewed shark-fishing mortality research (Science, 2021 update) and shark-finning summaries.</div>
+    <div class="src-list">
+      <a href="https://www.iucnssg.org/press/a-third-of-sharks-rays-and-chimaeras-are-threatened-with-extinction-as-new-reportnarrows-in-on-solutions" target="_blank" rel="noopener">IUCN: A third of sharks &amp; rays threatened</a>
+      <a href="https://www.science.org/content/article/shark-kills-rise-more-100-million-year-despite-antifinning-laws" target="_blank" rel="noopener">Science: shark kills rise past 100M/year</a>
+      <a href="https://www.sharks4kids.com/post/5-ways-you-can-save-sharks" target="_blank" rel="noopener">Sharks4Kids: 5 ways to help</a>
+      <a href="https://saveourseas.com/worldofsharks/how-can-i-help-sharks" target="_blank" rel="noopener">Save Our Seas Foundation</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var STORAGE_KEY = 'shark-mission-checklist';
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('#checklist input[type="checkbox"]'));
+    var progress = document.getElementById('progress');
+
+    function load() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      } catch (e) { return {}; }
+    }
+    function save(state) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+    }
+    function updateProgress() {
+      var checked = boxes.filter(function (b) { return b.checked; }).length;
+      progress.textContent = checked + ' / ' + boxes.length + ' activated';
+    }
+
+    var state = load();
+    boxes.forEach(function (b) {
+      var key = b.getAttribute('data-key');
+      if (state[key]) b.checked = true;
+      b.addEventListener('change', function () {
+        state[key] = b.checked;
+        save(state);
+        updateProgress();
+      });
+    });
+    updateProgress();
+  })();
+</script>
