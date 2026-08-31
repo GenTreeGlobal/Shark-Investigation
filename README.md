@@ -16,6 +16,17 @@ rescue mini-game built from the same research.
   system (Bronze/Silver/Gold) so classmates can compare scores. The original
   `game.html` is unchanged. Published version:
   https://claude.ai/code/artifact/5551c687-a41f-48fe-9f76-550c4dd444d1
+- `game-scholar.html` — **Manta Rider Rescue: Shark Scholar**, a
+  reading-and-knowledge difficulty tier instead of a speed one: before each
+  rescue, read a short real field-log paragraph and answer a multiple-choice
+  question about it (unlimited retries, no penalty) to unlock the mission.
+  The rescue itself stays simple (big, easy buttons — the challenge is what
+  you know, not how fast you tap). Ends with a 3-question final exam and a
+  Junior Ranger / Field Researcher / Marine Biologist rank. Published
+  version: https://claude.ai/code/artifact/026cf89c-e7a9-43c7-a68a-13328539ede6
+
+All three games and the mission briefing link to each other so a kid can
+hop between difficulty styles.
 
 ## Inspiration
 

@@ -1,0 +1,674 @@
+<title>Manta Rider Rescue: Shark Scholar</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,700&display=swap');
+
+  :root {
+    --deep: #0a1f3d; --mid: #1a3a6b; --line: #3a5fa8;
+    --sand: #f6efe1; --card: #fffaf0; --ink: #0d1b2a; --ink-soft: #3d4f60;
+    --aqua: #1fb8a6; --aqua-deep: #0c8677;
+    --sun: #f5a52a; --sun-deep: #cf7f0f;
+    --coral: #ee5a45; --coral-deep: #c73f2d;
+    --scholar: #6a5cd0; --scholar-deep: #4f3fb8;
+    --hairline: rgba(13, 27, 42, 0.14);
+    --shadow: 0 18px 40px -20px rgba(7, 35, 56, 0.5);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --deep: #060f22; --mid: #142a4d; --line: #4a6fc2;
+      --sand: #081c30; --card: #0e2740; --ink: #eaf2f8; --ink-soft: #a9c0d2;
+      --aqua: #37c9b6; --aqua-deep: #58e0cc;
+      --sun: #f5b64a; --sun-deep: #ffcf7d;
+      --coral: #ff7c65; --coral-deep: #ffa08e;
+      --scholar: #9c8ff0; --scholar-deep: #c3b9ff;
+      --hairline: rgba(234, 242, 248, 0.14);
+      --shadow: 0 18px 44px -18px rgba(0,0,0,0.65);
+    }
+  }
+  :root[data-theme="dark"] {
+    --deep: #060f22; --mid: #142a4d; --line: #4a6fc2;
+    --sand: #081c30; --card: #0e2740; --ink: #eaf2f8; --ink-soft: #a9c0d2;
+    --aqua: #37c9b6; --aqua-deep: #58e0cc;
+    --sun: #f5b64a; --sun-deep: #ffcf7d;
+    --coral: #ff7c65; --coral-deep: #ffa08e;
+    --scholar: #9c8ff0; --scholar-deep: #c3b9ff;
+    --hairline: rgba(234, 242, 248, 0.14);
+    --shadow: 0 18px 44px -18px rgba(0,0,0,0.65);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--sand); color: var(--ink); font-family: 'Nunito', system-ui, sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  h1, h2, h3 { font-family: 'Baloo 2', 'Nunito', sans-serif; text-wrap: balance; margin: 0; }
+  button { font-family: inherit; cursor: pointer; }
+
+  .stage { min-height: 100vh; background: radial-gradient(120% 140% at 20% -10%, var(--line) 0%, transparent 55%), linear-gradient(165deg, var(--deep), var(--mid) 75%); display: flex; flex-direction: column; align-items: center; padding: 28px 16px 48px; }
+  .frame { width: 100%; max-width: 640px; }
+  .screen { display: none; }
+  .screen.active { display: block; animation: rise .35s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; color: #dcecf5; gap: 10px; flex-wrap: wrap; }
+  .topbar .brand { display: flex; align-items: center; gap: 8px; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 15px; }
+  .topbar .brand svg { width: 20px; height: 20px; stroke: var(--sun); }
+  .mode-tag { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #fff; background: var(--scholar); padding: 3px 9px; border-radius: 999px; }
+  .badge-tray { display: flex; gap: 6px; align-items: center; }
+  .badge-tray .slot { width: 26px; height: 26px; border-radius: 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .badge-tray .slot.filled { background: color-mix(in srgb, var(--sun) 30%, transparent); border-color: var(--sun); }
+  .score-live { font-size: 12.5px; font-weight: 800; color: var(--scholar-deep); }
+
+  .card { background: var(--card); border: 1px solid var(--hairline); border-radius: 22px; padding: 26px 24px; box-shadow: var(--shadow); }
+
+  .title-card { text-align: center; padding: 40px 26px; }
+  .title-card .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--scholar-deep); background: color-mix(in srgb, var(--scholar) 16%, transparent); padding: 6px 14px; border-radius: 999px; }
+  .title-card h1 { font-size: clamp(28px, 6.6vw, 42px); margin-top: 16px; color: var(--ink); }
+  .title-card h1 span { color: var(--scholar-deep); }
+  .title-card p { color: var(--ink-soft); font-size: 15px; font-weight: 600; line-height: 1.6; margin-top: 12px; max-width: 48ch; margin-left: auto; margin-right: auto; }
+  .rules { text-align: left; margin-top: 22px; display: grid; gap: 8px; }
+  .rules .rule { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; font-weight: 700; color: var(--ink-soft); }
+  .rules .rule b { color: var(--ink); }
+  .rules .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--scholar); margin-top: 5px; flex: none; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; border: none; border-radius: 999px; font-weight: 800; font-size: 15px; padding: 13px 26px; margin-top: 24px; background: var(--scholar); color: #fff; box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--scholar) 70%, transparent); }
+  .btn:hover { background: var(--scholar-deep); }
+  .btn.secondary { background: var(--aqua); box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--aqua) 70%, transparent); }
+  .btn.secondary:hover { background: var(--aqua-deep); }
+  .btn.ghost { background: transparent; border: 2px solid rgba(255,255,255,0.35); color: #eef6fb; box-shadow: none; }
+  .other-link { display: block; margin-top: 10px; font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+  .other-link a { color: var(--aqua-deep); }
+  .resume-note { margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--sun-deep); }
+
+  .radar-card { text-align: center; }
+  .radar { width: 160px; height: 160px; margin: 6px auto 18px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--scholar) 20%, transparent) 0%, transparent 70%); border: 2px solid color-mix(in srgb, var(--scholar) 45%, transparent); position: relative; overflow: hidden; }
+  .radar::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, color-mix(in srgb, var(--scholar) 55%, transparent), transparent 30%); animation: sweep 2.2s linear infinite; }
+  .radar .ping { position: absolute; width: 12px; height: 12px; border-radius: 50%; background: var(--scholar); box-shadow: 0 0 0 6px color-mix(in srgb, var(--scholar) 30%, transparent); top: 38%; left: 58%; animation: blink 1s ease-in-out infinite; }
+  @keyframes sweep { to { transform: rotate(360deg); } }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  @media (prefers-reduced-motion: reduce) { .radar::before { animation: none; } .ping { animation: none; } }
+  .mission-kicker { font-size: 12.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--scholar-deep); }
+  .radar-card h2 { font-size: 23px; margin-top: 6px; color: var(--ink); }
+  .radar-card .subject { font-size: 15px; font-weight: 700; color: var(--coral-deep); margin-top: 4px; }
+  .radar-card .flavor { font-size: 14.5px; color: var(--ink-soft); font-weight: 600; margin-top: 10px; line-height: 1.55; max-width: 46ch; margin-left: auto; margin-right: auto; }
+  .rider-pick { font-size: 13px; font-weight: 800; color: var(--ink-soft); margin-top: 12px; }
+  .rider-pick b { color: var(--ink); }
+
+  /* field log */
+  .log-card { }
+  .log-head { display: flex; align-items: center; gap: 10px; }
+  .log-head .icon { width: 34px; height: 34px; border-radius: 10px; background: color-mix(in srgb, var(--scholar) 16%, transparent); display: flex; align-items: center; justify-content: center; flex: none; }
+  .log-head .icon svg { width: 18px; height: 18px; stroke: var(--scholar-deep); }
+  .log-head h2 { font-size: 19px; color: var(--ink); }
+  .log-text { margin-top: 16px; font-size: 17px; line-height: 1.75; font-weight: 700; color: var(--ink); background: color-mix(in srgb, var(--scholar) 7%, transparent); border-left: 3px solid var(--scholar); border-radius: 0 14px 14px 0; padding: 18px 20px; }
+  .log-hint { margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--ink-soft); }
+
+  /* quiz */
+  .quiz-card { }
+  .quiz-progress { font-size: 12.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--scholar-deep); }
+  .quiz-q { font-size: 19px; font-weight: 700; color: var(--ink); margin-top: 8px; line-height: 1.4; }
+  .quiz-options { display: grid; gap: 12px; margin-top: 20px; }
+  .quiz-opt { text-align: left; border: 2px solid var(--hairline); background: var(--card); border-radius: 14px; padding: 14px 18px; font-size: 15.5px; font-weight: 700; color: var(--ink); min-height: 56px; display: flex; align-items: center; }
+  .quiz-opt:hover { border-color: var(--scholar); }
+  .quiz-opt.correct { background: color-mix(in srgb, var(--aqua) 22%, transparent); border-color: var(--aqua-deep); }
+  .quiz-opt.wrong { background: color-mix(in srgb, var(--coral) 18%, transparent); border-color: var(--coral-deep); }
+  .quiz-opt[disabled] { cursor: default; }
+  .quiz-feedback { margin-top: 14px; font-size: 14.5px; font-weight: 800; min-height: 20px; }
+  .quiz-feedback.good { color: var(--aqua-deep); }
+  .quiz-feedback.bad { color: var(--coral-deep); }
+  .quiz-actions { margin-top: 4px; }
+
+  /* mission scene */
+  .mission-card { text-align: center; }
+  .progressbar { height: 10px; border-radius: 999px; background: var(--hairline); overflow: hidden; margin: 4px 0 20px; }
+  .progressbar > div { height: 100%; background: linear-gradient(90deg, var(--aqua), var(--aqua-deep)); width: 0%; transition: width .25s ease; }
+  .scene { position: relative; width: 100%; aspect-ratio: 4 / 3; max-height: 280px; border-radius: 18px; margin: 0 auto 18px; background: linear-gradient(180deg, color-mix(in srgb, var(--aqua) 20%, var(--sand)), color-mix(in srgb, var(--mid) 40%, var(--sand))); overflow: hidden; border: 1px solid var(--hairline); }
+  .shark-svg { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%); width: 62%; }
+  .shark-svg path.body { fill: #8fa9bd; }
+  :root[data-theme="dark"] .shark-svg path.body { fill: #5f7c92; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .shark-svg path.body { fill: #5f7c92; } }
+  .snag { position: absolute; width: 38px; height: 38px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; transform: translate(-50%, -50%); transition: transform .15s ease, opacity .2s ease; }
+  .snag:active { transform: translate(-50%, -50%) scale(0.85); }
+  .snag.cleared { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(1.6); }
+  .snag.net { background: repeating-linear-gradient(45deg, #4a5b68, #4a5b68 3px, #6d8496 3px, #6d8496 6px); box-shadow: 0 4px 10px -4px rgba(0,0,0,.4); }
+  .snag.plastic { background: color-mix(in srgb, var(--coral) 75%, white); border: 3px solid var(--coral-deep); }
+  .snag.rubble { background: #9c8a72; border-radius: 6px; }
+  .snag.family { background: color-mix(in srgb, var(--coral) 80%, black 10%); }
+  .pop { position: absolute; font-size: 11px; font-weight: 800; color: var(--aqua-deep); pointer-events: none; animation: floatup .5s ease forwards; }
+  @keyframes floatup { to { transform: translateY(-22px); opacity: 0; } }
+  .mission-hint { font-size: 14px; font-weight: 700; color: var(--ink-soft); margin-top: 4px; }
+
+  /* fact screen */
+  .fact-card { text-align: center; }
+  .badge-reveal { width: 84px; height: 84px; border-radius: 22px; margin: 0 auto 14px; background: linear-gradient(155deg, var(--sun), var(--sun-deep)); display: flex; align-items: center; justify-content: center; font-size: 40px; box-shadow: 0 14px 26px -10px color-mix(in srgb, var(--sun) 70%, transparent); }
+  .fact-card h2 { font-size: 22px; color: var(--ink); }
+  .fact-card .badge-name { font-size: 13px; font-weight: 800; color: var(--sun-deep); text-transform: uppercase; letter-spacing: .06em; margin-top: 2px; }
+  .fact-box { margin-top: 18px; text-align: left; padding: 16px 18px; border-radius: 14px; background: color-mix(in srgb, var(--aqua) 10%, transparent); border-left: 3px solid var(--aqua); font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.6; }
+  .flashback { margin-top: 14px; text-align: left; padding: 14px 16px; border-radius: 14px; background: color-mix(in srgb, var(--coral) 10%, transparent); border-left: 3px solid var(--coral); font-size: 13.5px; font-weight: 700; color: var(--ink-soft); line-height: 1.55; }
+  .flashback b { color: var(--coral-deep); }
+
+  /* final exam banner */
+  .exam-banner { text-align: center; }
+  .exam-banner .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--scholar-deep); background: color-mix(in srgb, var(--scholar) 16%, transparent); padding: 6px 14px; border-radius: 999px; }
+  .exam-banner h2 { font-size: 22px; margin-top: 14px; color: var(--ink); }
+  .exam-banner p { font-size: 14.5px; color: var(--ink-soft); font-weight: 600; margin-top: 8px; line-height: 1.6; }
+
+  /* finale */
+  .finale-card { text-align: center; }
+  .rank-badge { display: inline-block; font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 6px 16px; border-radius: 999px; margin-top: 10px; }
+  .rank-gold { background: color-mix(in srgb, var(--sun) 25%, transparent); color: var(--sun-deep); }
+  .rank-silver { background: color-mix(in srgb, #9fb1bd 35%, transparent); color: #56707f; }
+  .rank-bronze { background: color-mix(in srgb, var(--coral) 20%, transparent); color: var(--coral-deep); }
+  .big-number { font-family: 'Baloo 2', sans-serif; font-size: clamp(38px, 11vw, 58px); color: var(--coral-deep); line-height: 1; margin-top: 10px; font-variant-numeric: tabular-nums; }
+  .finale-card .caption { font-size: 14px; font-weight: 700; color: var(--ink-soft); margin-top: 8px; }
+  .stat-row { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-top: 18px; }
+  .stat-row .stat { border: 1px solid var(--hairline); border-radius: 12px; padding: 10px; }
+  .stat-row .stat b { display: block; font-family: 'Baloo 2', sans-serif; font-size: 18px; color: var(--scholar-deep); }
+  .stat-row .stat span { font-size: 11px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; }
+  .badge-wall { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin: 20px 0 6px; }
+  .badge-wall .slot { aspect-ratio: 1; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; background: color-mix(in srgb, var(--sun) 18%, transparent); border: 1px solid color-mix(in srgb, var(--sun) 45%, transparent); }
+  .share-panel { margin-top: 18px; padding: 18px; border-radius: 16px; background: var(--deep); color: #eef6fb; text-align: left; }
+  .share-panel h3 { font-size: 15px; color: #fff; }
+  .share-panel p { font-size: 13px; color: #c6dcea; font-weight: 600; margin-top: 6px; line-height: 1.5; }
+  .share-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  .copy-msg { font-size: 12px; font-weight: 800; color: var(--sun-deep); margin-top: 8px; height: 14px; }
+
+  @media (max-width: 480px) { .badge-wall { grid-template-columns: repeat(3, 1fr); } .stat-row { grid-template-columns: 1fr; } }
+</style>
+
+<div class="stage">
+  <div class="frame">
+    <div class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2"/></svg>
+        Manta Rider Rescue <span class="mode-tag">Shark Scholar</span>
+      </div>
+      <div class="badge-tray"><span class="score-live" id="scoreLive">0 ✓</span><div id="badgeTray" style="display:flex;gap:6px;"></div></div>
+    </div>
+
+    <section class="screen active" id="screen-title">
+      <div class="card title-card">
+        <span class="eyebrow">📖 Read. Think. Rescue.</span>
+        <h1>Manta Rider Rescue: <span>Shark Scholar</span></h1>
+        <p>Same crew, same six sharks — but this time, you have to prove you understand the mission before Johnny and James can launch. Read each field log, answer the question, then make the rescue.</p>
+        <div class="rules">
+          <div class="rule"><span class="dot"></span><span><b>Read the field log</b> — a few real sentences about the danger this shark is facing.</span></div>
+          <div class="rule"><span class="dot"></span><span><b>Answer the question</b> — get it right to unlock the Manta Rider. Wrong answers just ask you to try again.</span></div>
+          <div class="rule"><span class="dot"></span><span><b>Rescue stays simple</b> — big, easy buttons to free the shark. The challenge is what you know, not how fast you tap.</span></div>
+          <div class="rule"><span class="dot"></span><span><b>Final exam</b> — after mission 6, three review questions test everything you learned.</span></div>
+        </div>
+        <div><button class="btn" id="startBtn">Start the field test →</button></div>
+        <div class="resume-note" id="resumeNote" style="display:none;"></div>
+        <div class="other-link">Warm up first: <a href="https://claude.ai/code/artifact/e0573acd-29a6-4de3-b7dd-22eb0656df2e" target="_blank" rel="noopener">original Manta Rider Rescue</a> · <a href="https://claude.ai/code/artifact/5551c687-a41f-48fe-9f76-550c4dd444d1" target="_blank" rel="noopener">Classroom Challenge (speed mode)</a></div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-radar">
+      <div class="card radar-card">
+        <div class="mission-kicker" id="radarKicker">Mission 1 of 6</div>
+        <h2>Sarah's shark finder is pinging!</h2>
+        <div class="radar"><div class="ping"></div></div>
+        <div class="subject" id="radarSubject"></div>
+        <p class="flavor" id="radarFlavor"></p>
+        <p class="rider-pick" id="radarRider"></p>
+        <button class="btn secondary" id="launchBtn">Open the field log</button>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-log">
+      <div class="card log-card">
+        <div class="log-head">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg></div>
+          <h2 id="logTitle">Field Log</h2>
+        </div>
+        <p class="log-text" id="logText"></p>
+        <p class="log-hint">Read it carefully — the next question comes straight from this log.</p>
+        <button class="btn" id="toQuizBtn">I've read it — ask me →</button>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-quiz">
+      <div class="card quiz-card">
+        <div class="quiz-progress" id="quizProgress">Question</div>
+        <div class="quiz-q" id="quizQ"></div>
+        <div class="quiz-options" id="quizOptions"></div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+        <div class="quiz-actions"><button class="btn" id="quizContinueBtn" style="display:none;">Launch the Manta Rider →</button></div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-mission">
+      <div class="card mission-card">
+        <div class="mission-kicker" id="missionKicker">Mission 1 of 6</div>
+        <h2 id="missionTitle"></h2>
+        <div class="progressbar"><div id="missionProgress"></div></div>
+        <div class="scene" id="missionScene"></div>
+        <p class="mission-hint" id="missionHint">Tap each snag to free the shark!</p>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-fact">
+      <div class="card fact-card">
+        <div class="badge-reveal" id="badgeEmoji"></div>
+        <div class="badge-name" id="badgeName"></div>
+        <h2 id="factTitle"></h2>
+        <div class="fact-box" id="factBox"></div>
+        <div class="flashback" id="flashback" style="display:none;"></div>
+        <button class="btn" id="nextMissionBtn">Continue the mission →</button>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-exam-intro">
+      <div class="card exam-banner">
+        <span class="eyebrow">Final Exam</span>
+        <h2>You freed all 6 sharks. Now prove you remember why it matters.</h2>
+        <p>Three quick review questions from everything Sarah, Johnny &amp; James taught you today.</p>
+        <button class="btn" id="startExamBtn">Begin the final exam →</button>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-finale">
+      <div class="card finale-card">
+        <div class="mission-kicker">Mission complete</div>
+        <h2>Johnny, James &amp; Sarah saved 6 sharks today.</h2>
+        <div class="rank-badge" id="rankBadge"></div>
+        <div class="stat-row">
+          <div class="stat"><b id="statScore">0/9</b><span>Questions correct</span></div>
+          <div class="stat"><b id="statBadges">0/6</b><span>Sharks rescued</span></div>
+        </div>
+        <div class="caption" style="margin-top:20px;">But every year, real sharks lose this many:</div>
+        <div class="big-number" id="bigNumber">0</div>
+        <div class="caption">sharks killed for their fins and meat — every single year.</div>
+        <div class="badge-wall" id="badgeWall"></div>
+        <div class="share-panel">
+          <h3>Help Johnny &amp; James spread the word</h3>
+          <p>Challenge your classmates to become a Marine Biologist too — and make sure they learn the 100,000,000 number.</p>
+          <div class="share-actions">
+            <button class="btn secondary" id="copyMsgBtn" style="margin-top:0;">Copy a message to share</button>
+            <button class="btn ghost" id="replayBtn" style="margin-top:0;">Play again</button>
+          </div>
+          <div class="copy-msg" id="copyMsg"></div>
+        </div>
+        <p style="margin-top:16px;font-size:13px;font-weight:700;color:var(--ink-soft);">Read the <a href="https://claude.ai/code/artifact/b8984918-e4f7-4cc5-87b2-0a57a940ada7" target="_blank" rel="noopener" style="color:var(--aqua-deep);">Shark Rescue Mission briefing</a> for the full research behind every question.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "manta-rider-rescue-scholar-v1";
+
+  var MISSIONS = [
+    {
+      title: "Ghost Net Tangle", subject: "Reef Shark", character: "Johnny",
+      flavor: "Sarah's shark finder found a reef shark caught in an old, abandoned fishing net drifting near the reef.",
+      log: "Fishing nets that get lost or left behind in the ocean are called “ghost nets.” They keep drifting for years, trapping sea animals long after the fishing boat is gone. Sharks caught this way were never the target at all — scientists call this kind of accidental catch bycatch.",
+      question: { q: "What does the word “bycatch” mean?",
+        options: [
+          { text: "A net built just for catching sharks", correct: false },
+          { text: "An animal caught by accident while fishing for something else", correct: true },
+          { text: "A boat that hunts for lost nets", correct: false }
+        ] },
+      snagType: "net", snagCount: 5,
+      badge: { name: "Net Cutter", emoji: "🕸️" },
+      factTitle: "Real sharks get tangled too",
+      fact: "Ghost nets keep trapping sea life long after fishers leave them behind. This is why reducing bycatch — with better nets and fishing gear — is one of the most important ways to protect sharks."
+    },
+    {
+      title: "The Longline Hook", subject: "Great White Shark", character: "James",
+      flavor: "A poacher's fishing line has hooked a great white shark. James has to steer the Manta Rider through the current to reach her.",
+      log: "Some fishing boats set out long lines with hundreds of hooks to catch fish like tuna, and sharks often get hooked too. Between shark fin soup and hunting for sport, people kill at least 100,000,000 sharks every single year — while fewer than 10 people die from shark attacks in that same year.",
+      question: { q: "About how many sharks are killed by people every year?",
+        options: [
+          { text: "About 100", correct: false },
+          { text: "About 100,000,000", correct: true },
+          { text: "About 100,000", correct: false }
+        ] },
+      snagType: "net", snagCount: 5,
+      badge: { name: "Hook Breaker", emoji: "🪝" },
+      factTitle: "This is the big one",
+      fact: "100,000,000 sharks a year is the real, scientifically-estimated number — and it's far, far larger than the number of people ever hurt by a shark.",
+      flashback: "This is the exact number Koki reports in Wild Kratts: \"Stuck on Sharks\" — the episode that kicked off this whole mission."
+    },
+    {
+      title: "Plastic Rings", subject: "Hammerhead Shark", character: "Johnny",
+      flavor: "A young hammerhead is caught in plastic rings floating near the surface, and can't swim freely.",
+      log: "Plastic rings, bags, and rope don't disappear when people throw them away. They can float in the ocean for years, trapping and injuring sharks and other sea animals. Using less plastic, and cleaning up beaches and rivers, helps keep the water safer for sharks.",
+      question: { q: "What is one real way people can help stop plastic from hurting sharks?",
+        options: [
+          { text: "Use less plastic and help clean up beaches", correct: true },
+          { text: "Throw plastic rings directly into the ocean", correct: false },
+          { text: "Nothing can be done about ocean plastic", correct: false }
+        ] },
+      snagType: "plastic", snagCount: 5,
+      badge: { name: "Plastic Fighter", emoji: "♻️" },
+      factTitle: "Plastic hurts sharks too",
+      fact: "Plastic pollution is a threat sharks face even where no one is hunting them at all — which is exactly why reducing plastic use matters for ocean animals everywhere."
+    },
+    {
+      title: "Bleached Nursery", subject: "Baby Nurse Sharks", character: "James",
+      flavor: "The coral nursery where baby nurse sharks grow up is crumbling from warming water.",
+      log: "Baby sharks often grow up in shallow reefs and mangroves — safe places scientists call nurseries. When ocean water gets too warm, coral reefs can bleach and crumble, destroying those nurseries. That means fewer pups survive to become adults, even in places where no one is hunting sharks at all.",
+      question: { q: "What is a shark “nursery”?",
+        options: [
+          { text: "A hospital where hurt sharks are treated", correct: false },
+          { text: "A safe, shallow place where baby sharks grow up", correct: true },
+          { text: "A boat used to catch baby sharks", correct: false }
+        ] },
+      snagType: "rubble", snagCount: 5,
+      badge: { name: "Reef Builder", emoji: "🪸" },
+      factTitle: "Baby sharks need safe nurseries",
+      fact: "Protecting reefs and mangroves is a quieter kind of shark conservation — it's not about stopping hunters, it's about keeping the nursery itself alive."
+    },
+    {
+      title: "Poacher Chase", subject: "Whale Shark", character: "Johnny",
+      flavor: "A finning boat is chasing a gentle whale shark. Johnny has to weave the Manta Rider between them.",
+      log: "A shark sanctuary is an area of ocean where a country makes it against the law to hunt sharks at all. Sanctuaries give shark populations a real, protected place to recover after years of overfishing.",
+      question: { q: "What is a shark sanctuary?",
+        options: [
+          { text: "A place where hunting sharks is against the law", correct: true },
+          { text: "A place where anyone can hunt sharks for free", correct: false },
+          { text: "A special kind of fishing boat", correct: false }
+        ] },
+      snagType: "net", snagCount: 5,
+      badge: { name: "Wave Rider", emoji: "🌊" },
+      factTitle: "Sanctuaries stop the chase",
+      fact: "Sanctuaries work because the law backs them up — hunting sharks inside one is illegal, which is very different from just asking people nicely to stop."
+    },
+    {
+      title: "Guardian of the Deep", subject: "Mother Great White & Pups", character: "James",
+      flavor: "The great white shark from the very first mission is about to have her pups — but old fishing line is still tangled near her fins.",
+      log: "Sharks grow slowly and don't have very many babies. Some sharks wait fifteen years or more before having their first litter, and even then, they may only have a few pups at a time. That means every adult shark that is saved matters far more than saving one fish that lays thousands of eggs.",
+      question: { q: "Why does saving one adult shark matter so much?",
+        options: [
+          { text: "Because sharks lay thousands of eggs every year", correct: false },
+          { text: "Because sharks grow slowly and have very few pups", correct: true },
+          { text: "Because sharks are the fastest animals in the ocean", correct: false }
+        ] },
+      snagType: "family", snagCount: 5,
+      badge: { name: "Guardian of the Deep", emoji: "🛡️" },
+      factTitle: "Why every shark counts",
+      fact: "Because sharks reproduce so slowly, populations that are overfished can take decades to recover — which is why protecting adult sharks now matters so much for the future."
+    }
+  ];
+
+  var FINAL_EXAM = [
+    { q: "What do scientists call it when a shark is caught by accident while fishing for something else?",
+      options: [ { text: "Bycatch", correct: true }, { text: "Finning", correct: false }, { text: "A sanctuary", correct: false } ] },
+    { q: "About how many sharks are killed by people every year?",
+      options: [ { text: "About 1,000", correct: false }, { text: "About 100,000,000", correct: true }, { text: "About 10", correct: false } ] },
+    { q: "Which of these is a real way people protect sharks?",
+      options: [ { text: "Creating shark sanctuaries where hunting is illegal", correct: true }, { text: "Selling more shark fin soup", correct: false }, { text: "Removing coral reefs", correct: false } ] }
+  ];
+
+  var els = {};
+  ["screen-title","screen-radar","screen-log","screen-quiz","screen-mission","screen-fact","screen-exam-intro","screen-finale"].forEach(function (id) {
+    els[id] = document.getElementById(id);
+  });
+  var badgeTray = document.getElementById("badgeTray");
+  var scoreLive = document.getElementById("scoreLive");
+  var startBtn = document.getElementById("startBtn");
+  var launchBtn = document.getElementById("launchBtn");
+  var toQuizBtn = document.getElementById("toQuizBtn");
+  var nextMissionBtn = document.getElementById("nextMissionBtn");
+  var startExamBtn = document.getElementById("startExamBtn");
+  var replayBtn = document.getElementById("replayBtn");
+  var copyMsgBtn = document.getElementById("copyMsgBtn");
+  var resumeNote = document.getElementById("resumeNote");
+
+  var state = { current: 0, earnedBadges: [], correctFirstTry: 0, examIndex: 0, examCorrect: 0 };
+
+  function loadState() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if (saved && Array.isArray(saved.earnedBadges)) state.earnedBadges = saved.earnedBadges;
+      if (saved && typeof saved.bestScore === "number") state.bestScore = saved.bestScore;
+    } catch (e) {}
+  }
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ earnedBadges: state.earnedBadges, bestScore: state.bestScore })); } catch (e) {}
+  }
+
+  function renderBadgeTray() {
+    badgeTray.innerHTML = "";
+    MISSIONS.forEach(function (m, i) {
+      var slot = document.createElement("div");
+      slot.className = "slot" + (state.earnedBadges.indexOf(i) > -1 ? " filled" : "");
+      slot.textContent = state.earnedBadges.indexOf(i) > -1 ? m.badge.emoji : "";
+      badgeTray.appendChild(slot);
+    });
+    scoreLive.textContent = state.correctFirstTry + " ✓";
+  }
+
+  function showScreen(id) {
+    Object.keys(els).forEach(function (k) { els[k].classList.remove("active"); });
+    els[id].classList.add("active");
+  }
+
+  function init() {
+    loadState();
+    renderBadgeTray();
+    if (typeof state.bestScore === "number") {
+      resumeNote.style.display = "block";
+      resumeNote.textContent = "Your best score so far: " + state.bestScore + "/9. Play again to beat it!";
+    }
+  }
+
+  startBtn.addEventListener("click", function () {
+    state.current = 0; state.earnedBadges = []; state.correctFirstTry = 0;
+    renderBadgeTray();
+    goToRadar();
+  });
+
+  function goToRadar() {
+    var m = MISSIONS[state.current];
+    document.getElementById("radarKicker").textContent = "Mission " + (state.current + 1) + " of " + MISSIONS.length;
+    document.getElementById("radarSubject").textContent = m.subject;
+    document.getElementById("radarFlavor").textContent = m.flavor;
+    document.getElementById("radarRider").innerHTML = "<b>" + m.character + "</b> is ready — but needs the field log read first.";
+    showScreen("screen-radar");
+  }
+
+  launchBtn.addEventListener("click", function () {
+    var m = MISSIONS[state.current];
+    document.getElementById("logTitle").textContent = "Field Log: " + m.subject;
+    document.getElementById("logText").textContent = m.log;
+    showScreen("screen-log");
+  });
+
+  toQuizBtn.addEventListener("click", function () {
+    var m = MISSIONS[state.current];
+    document.getElementById("quizProgress").textContent = "Mission " + (state.current + 1) + " of " + MISSIONS.length + " — Question";
+    renderQuiz(m.question, function (gotItFirstTry) {
+      if (gotItFirstTry) state.correctFirstTry++;
+      renderBadgeTray();
+      startMission(m);
+    });
+    showScreen("screen-quiz");
+  });
+
+  function renderQuiz(question, onDone) {
+    var optionsWrap = document.getElementById("quizOptions");
+    var feedback = document.getElementById("quizFeedback");
+    var continueBtn = document.getElementById("quizContinueBtn");
+    document.getElementById("quizQ").textContent = question.q;
+    optionsWrap.innerHTML = "";
+    feedback.textContent = ""; feedback.className = "quiz-feedback";
+    continueBtn.style.display = "none";
+    var answered = false, firstTry = true;
+
+    var order = question.options.map(function (o, i) { return i; });
+    order = order.sort(function () { return Math.random() - 0.5; });
+
+    order.forEach(function (i) {
+      var opt = question.options[i];
+      var btn = document.createElement("button");
+      btn.className = "quiz-opt";
+      btn.textContent = opt.text;
+      btn.addEventListener("click", function () {
+        if (answered && opt.correct) return;
+        if (opt.correct) {
+          btn.classList.add("correct");
+          feedback.textContent = "Correct! " + (firstTry ? "Great reading." : "Nice work catching it.");
+          feedback.className = "quiz-feedback good";
+          answered = true;
+          Array.prototype.forEach.call(optionsWrap.children, function (b) { b.setAttribute("disabled", "true"); });
+          continueBtn.style.display = "inline-flex";
+          continueBtn.onclick = function () { onDone(firstTry); };
+        } else {
+          btn.classList.add("wrong");
+          btn.setAttribute("disabled", "true");
+          feedback.textContent = "Not quite — look at the field log again and try another answer.";
+          feedback.className = "quiz-feedback bad";
+          firstTry = false;
+        }
+      });
+      optionsWrap.appendChild(btn);
+    });
+  }
+
+  function startMission(m) {
+    document.getElementById("missionKicker").textContent = "Mission " + (state.current + 1) + " of " + MISSIONS.length;
+    document.getElementById("missionTitle").textContent = m.title;
+    document.getElementById("missionProgress").style.width = "0%";
+    var scene = document.getElementById("missionScene");
+    scene.innerHTML = "";
+    showScreen("screen-mission");
+    buildFreeMission(scene, m);
+  }
+
+  function sharkSvg() {
+    return '<svg class="shark-svg" viewBox="0 0 200 100" aria-hidden="true">' +
+      '<path class="body" d="M10 60 C 30 30, 80 20, 120 30 C 150 15, 175 20, 190 35 C 178 40, 165 42, 155 40 C 150 55, 130 70, 100 72 C 60 76, 25 70, 10 60 Z"/>' +
+      '<circle cx="45" cy="45" r="3" fill="#1a2733"/>' +
+      '</svg>';
+  }
+
+  var SNAG_POS = [ [30,30],[70,20],[50,68],[80,75],[25,60] ];
+
+  function buildFreeMission(scene, m) {
+    scene.insertAdjacentHTML("beforeend", sharkSvg());
+    var cleared = 0;
+    for (var i = 0; i < m.snagCount; i++) {
+      var pos = SNAG_POS[i % SNAG_POS.length];
+      var btn = document.createElement("button");
+      btn.className = "snag " + m.snagType;
+      btn.style.left = pos[0] + "%";
+      btn.style.top = pos[1] + "%";
+      btn.setAttribute("aria-label", "Clear obstruction");
+      (function (btn) {
+        btn.addEventListener("click", function onClick() {
+          if (btn.classList.contains("cleared")) return;
+          btn.classList.add("cleared");
+          btn.removeEventListener("click", onClick);
+          cleared++;
+          document.getElementById("missionProgress").style.width = Math.round((cleared / m.snagCount) * 100) + "%";
+          var pop = document.createElement("div");
+          pop.className = "pop"; pop.textContent = "free!";
+          pop.style.left = btn.style.left; pop.style.top = btn.style.top;
+          scene.appendChild(pop);
+          setTimeout(function () { pop.remove(); }, 500);
+          if (cleared === m.snagCount) setTimeout(function () { completeMission(m); }, 450);
+        });
+      })(btn);
+      scene.appendChild(btn);
+    }
+  }
+
+  function completeMission(m) {
+    if (state.earnedBadges.indexOf(state.current) === -1) {
+      state.earnedBadges.push(state.current);
+      saveState();
+    }
+    renderBadgeTray();
+    document.getElementById("badgeEmoji").textContent = m.badge.emoji;
+    document.getElementById("badgeName").textContent = m.badge.name + " badge earned";
+    document.getElementById("factTitle").textContent = m.factTitle;
+    document.getElementById("factBox").textContent = m.fact;
+    var fb = document.getElementById("flashback");
+    if (m.flashback) { fb.style.display = "block"; fb.innerHTML = "<b>Flashback:</b> " + m.flashback; }
+    else { fb.style.display = "none"; }
+    nextMissionBtn.textContent = state.current === MISSIONS.length - 1 ? "Take the final exam →" : "Continue the mission →";
+    showScreen("screen-fact");
+  }
+
+  nextMissionBtn.addEventListener("click", function () {
+    state.current++;
+    if (state.current >= MISSIONS.length) {
+      showScreen("screen-exam-intro");
+    } else {
+      goToRadar();
+    }
+  });
+
+  startExamBtn.addEventListener("click", function () {
+    state.examIndex = 0; state.examCorrect = 0;
+    runExamQuestion();
+  });
+
+  function runExamQuestion() {
+    if (state.examIndex >= FINAL_EXAM.length) { showFinale(); return; }
+    document.getElementById("quizProgress").textContent = "Final Exam — Question " + (state.examIndex + 1) + " of " + FINAL_EXAM.length;
+    renderQuiz(FINAL_EXAM[state.examIndex], function (gotItFirstTry) {
+      if (gotItFirstTry) { state.examCorrect++; state.correctFirstTry++; renderBadgeTray(); }
+      state.examIndex++;
+      document.getElementById("quizContinueBtn").textContent = state.examIndex >= FINAL_EXAM.length ? "See my results →" : "Next question →";
+      runExamQuestion();
+    });
+    document.getElementById("quizContinueBtn").textContent = "Next question →";
+    showScreen("screen-quiz");
+  }
+
+  function showFinale() {
+    renderBadgeTray();
+    var wall = document.getElementById("badgeWall");
+    wall.innerHTML = "";
+    MISSIONS.forEach(function (m) {
+      var slot = document.createElement("div");
+      slot.className = "slot";
+      slot.textContent = m.badge.emoji;
+      slot.title = m.badge.name;
+      wall.appendChild(slot);
+    });
+    var score = state.correctFirstTry;
+    var rank = score >= 8 ? "gold" : score >= 5 ? "silver" : "bronze";
+    var rankLabel = { gold: "🏆 Marine Biologist", silver: "🥈 Field Researcher", bronze: "🥉 Junior Ranger" }[rank];
+    var rb = document.getElementById("rankBadge");
+    rb.className = "rank-badge rank-" + rank;
+    rb.textContent = rankLabel;
+    document.getElementById("statScore").textContent = score + "/9";
+    document.getElementById("statBadges").textContent = state.earnedBadges.length + "/6";
+    if (!state.bestScore || score > state.bestScore) { state.bestScore = score; saveState(); }
+    showScreen("screen-finale");
+    animateBigNumber();
+  }
+
+  function animateBigNumber() {
+    var el = document.getElementById("bigNumber");
+    var target = 100000000, start = null, duration = 1800;
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min(1, (ts - start) / duration);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(eased * target).toLocaleString();
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  copyMsgBtn.addEventListener("click", function () {
+    var msg = "I just scored " + state.correctFirstTry + "/9 in Manta Rider Rescue: Shark Scholar and learned that about 100,000,000 sharks are killed every year. Think you can beat my score? " + location.href;
+    var note = document.getElementById("copyMsg");
+    function shown(text) { note.textContent = text; setTimeout(function () { note.textContent = ""; }, 2500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(msg).then(function () { shown("Copied! Paste it to a friend."); }, function () { shown(msg); });
+    } else { shown(msg); }
+  });
+
+  replayBtn.addEventListener("click", function () {
+    state.current = 0; state.earnedBadges = []; state.correctFirstTry = 0;
+    renderBadgeTray();
+    goToRadar();
+  });
+
+  init();
+})();
+</script>
