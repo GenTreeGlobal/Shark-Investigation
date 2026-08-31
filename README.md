@@ -6,6 +6,15 @@ helps protect them, built for a family shark-conservation activity.
 Open `index.html` in a browser, or view the published version here:
 https://claude.ai/code/artifact/b8984918-e4f7-4cc5-87b2-0a57a940ada7
 
+## Inspiration
+
+This started from the Wild Kratts episode ["Stuck on Sharks"](https://pbskids.org/videos/watch/wild-kratts-full-episodes/1385807/stuck-on-sharks/29724)
+(Season 1, aired October 17, 2011), in which Koki reports that humans kill at
+least 100,000,000 sharks a year (shark fin soup and sport hunting) while fewer
+than 10 people die from shark attacks — a real, scientifically-supported
+figure. The page includes an episode card with that quote, a plot summary, and
+a link to watch it on PBS KIDS.
+
 ## Findings
 
 **Why sharks are declining**
